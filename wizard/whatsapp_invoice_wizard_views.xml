@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mnf_whatsapp_invoice_wizard_form" model="ir.ui.view">
+        <field name="name">mnf.whatsapp.invoice.wizard.form</field>
+        <field name="model">mnf.whatsapp.invoice.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send Invoice via WhatsApp">
+                <group>
+                    <group>
+                        <field name="move_id" invisible="1"/>
+                        <field name="partner_id"/>
+                        <field name="phone"/>
+                    </group>
+                </group>
+                <group>
+                    <div class="alert alert-info" role="alert">
+                        <strong>Step 1:</strong> &quot;Get Invoice PDF&quot; pe click karein — invoice ka PDF ban kar open/download hoga.<br/>
+                        <strong>Step 2:</strong> &quot;Open WhatsApp&quot; pe click karein — customer ke number par chat khulegi, message pehle se bhara hoga.<br/>
+                        <strong>Step 3:</strong> WhatsApp mein wahi PDF attach karke Send karein.
+                    </div>
+                </group>
+                <footer>
+                    <button name="action_download_invoice_pdf" string="Get Invoice PDF" type="object" class="btn-primary"/>
+                    <button name="action_open_whatsapp_web" string="Open WhatsApp" type="object" class="btn-success"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
