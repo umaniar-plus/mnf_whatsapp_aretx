@@ -78,7 +78,44 @@ class AccountMove(models.Model):
             return "account.account_invoices"
         return "account.account_invoices_without_payment"
 
+    import requests
+    import logging
+
+    _logger = logging.getLogger(__name__)
+
     def _send_invoice_via_node_whatsapp(self, pdf_content, file_path, phone, message):
+
+        node_url = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("mnf_whatsapp.node_service_url", "http://127.0.0.1:3000")
+            .rstrip("/")
+        )
+
+        try:
+            response = requests.post(
+                f"{node_url}/send-invoice",
+                json={
+                    "phone": phone,
+                    "file_path": file_path,
+                    "message": message,
+                },
+                timeout=180,
+            )
+
+            response.raise_for_status()
+
+            # 🔥 IMPORTANT: read response
+            result = response.text
+            _logger.info("Node WhatsApp Response: %s", result)
+
+            return True, None
+
+        except requests.exceptions.RequestException as e:
+            _logger.error("WhatsApp Node Error: %s", str(e))
+            return False, _("Cannot reach WhatsApp service at %s: %s") % (node_url, str(e))
+
+    def _send_invoice_via_node_whatsapp1(self, pdf_content, file_path, phone, message):
         """POST to Node.js WhatsApp service (phone, file_path, message). Call ensure_node_running before this."""
         node_url = (
             self.env["ir.config_parameter"]
